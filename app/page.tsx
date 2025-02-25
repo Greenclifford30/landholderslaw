@@ -19,7 +19,8 @@ export default function Home() {
     email: '',
     service: '',
   })
-
+  const CONSULTATION_API = process.env.NEXT_PUBLIC_CONSULTATION_URL 
+  || "https://dv29xveh03.execute-api.us-east-1.amazonaws.com/development/consultation";
   const validate = () => {
     const newErrors = { name: '', number: '', email: '', service: '' }
     let isValid = true
@@ -58,15 +59,44 @@ export default function Home() {
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (validate()) {
-      console.log('Form submitted:', formData)
-      // Process the submission (send to backend, etc.)
-      setFormData({ name: '', number: '', email: '', service: 'real-estate' })
+  
+    if (!validate()) {
+      return
+    }
+  
+    try {
+      // Optionally, show some loading state here
+      const response = await fetch(process.env.NEXT_PUBLIC_CONSULTATION_URL || '', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.number,       // if 'number' is your phone field
+          email: formData.email,
+          requestedService: formData.service,
+        }),
+      })
+
+      if (!response.ok) {
+        // If we get a 4xx or 5xx status code
+        throw new Error(`Request failed with status ${response.status}`)
+      }
+      // On success
       alert('Your consultation request has been submitted!')
+      setFormData({ name: '', number: '', email: '', service: 'real-estate' })
+  
+    } catch (error) {
+      console.error('Error submitting consultation request:', error)
+      alert('There was a problem submitting your consultation. Please try again later.')
+    } finally {
+      // Optionally, clear a loading state here
     }
   }
+  
 
   return (
     <>
