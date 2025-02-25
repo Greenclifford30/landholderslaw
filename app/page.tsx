@@ -40,18 +40,18 @@ export default function Home() {
                 </div>
               </div>
               <nav className="mt-4 md:mt-0 space-x-4">
-                <Link
+                {/* <Link
                   href="/admin"
                   className="text-xl text-gray-900 dark:text-white hover:underline"
                 >
                   Admin
-                </Link>
-                <Link
+                </Link> */}
+                {/* <Link
                   href="/client"
                   className="text-xl text-gray-900 dark:text-white hover:underline"
                 >
                   Client
-                </Link>
+                </Link> */}
                 <Link
                   href="/profile"
                   className="text-xl text-gray-900 dark:text-white hover:underline"
@@ -67,7 +67,7 @@ export default function Home() {
         <section className="bg-gradient-to-r from-yellow-600 to-yellow-700 py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="text-3xl font-bold text-white">
-              Expert Real Estate Attorney Services in Chicago, IL
+            Attorney by training, Husband by choice, Father by calling, and Gentleman by God!
             </p>
           </div>
         </section>

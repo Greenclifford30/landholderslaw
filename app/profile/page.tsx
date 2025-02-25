@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import tedPhoto from '../../public/profile.jpg' // Ensure you have a 650x650 image here
+import tedPhoto from '../../public/profile.png' // Ensure you have a 650x650 image here
 
 export default function Profile() {
   return (
@@ -39,17 +39,17 @@ export default function Profile() {
               </div>
               <nav className="mt-4 md:mt-0 space-x-4">
                 <Link
-                  href="/admin"
+                  href="/"
                   className="text-gray-900 dark:text-white hover:underline"
                 >
-                  Admin
+                  Home
                 </Link>
-                <Link
+                {/* <Link
                   href="/client"
                   className="text-gray-900 dark:text-white hover:underline"
                 >
                   Client Portal
-                </Link>
+                </Link> */}
                 <Link
                   href="/about"
                   className="text-gray-900 dark:text-white hover:underline"
@@ -88,13 +88,25 @@ export default function Profile() {
               <div className="space-y-8">
                 {/* About Section with Social Links */}
                 <section>
-                  <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
                     About Ted M. Word Esq.
                   </h3>
-                  <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
-                    Ted M. Word Esq. is a dedicated real estate attorney with extensive experience in property law. His commitment to providing personalized legal solutions has made him a trusted advisor to his clients.
+                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
+                  With over 25 years of experience, Ted Word is a distinguished real estate attorney dedicated to helping clients navigate the complexities of property law. Whether handling transactions, contract negotiations, or real estate disputes, he brings a wealth of knowledge and a client-focused approach to every case.
+
+
+
+His deep understanding of real estate law, combined with his commitment to excellence, has made him a trusted advocate for homeowners, investors, and businesses alike.
+
+
+
+Guided by his personal motto—
+
+“Attorney by training, Husband by choice, Father by calling, and Gentleman by God!”—
+
+Ted Word upholds integrity, professionalism, and service in every aspect of his work.
                   </p>
-                  <div className="mt-6 flex space-x-4">
+                  {/* <div className="mt-6 flex space-x-4">
                     <Link
                       href="https://twitter.com/yourprofile"
                       className="text-blue-500 hover:underline"
@@ -119,26 +131,26 @@ export default function Profile() {
                     >
                       Facebook
                     </Link>
-                  </div>
+                  </div> */}
                 </section>
 
                 {/* Education Section */}
                 <section>
-                  <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
                     Education
                   </h3>
-                  <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
-                    Ted M. Word Esq. is an alumnus of Tuskegee University, where he laid the academic foundation for his successful career in law.
+                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
+                  A proud graduate of Tuskegee University, Ted earned his bachelor’s degree before obtaining his Juris Doctor from Loyola University. 
                   </p>
                 </section>
 
                 {/* Bar Information Section */}
                 <section>
-                  <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
                     Bar Information
                   </h3>
-                  <p className="mt-4 text-lg text-gray-700 dark:text-gray-300">
-                    Ted is a proud member of the [Your State] Bar. (Replace with your actual bar details.)
+                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
+                    Ted is a proud member of the Illinois Bar.
                   </p>
                 </section>
               </div>
