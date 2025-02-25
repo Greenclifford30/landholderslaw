@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Attempt to parse the JSON body from the gateway response
-    let responseBody: any = null;
+    let responseBody;
     try {
       responseBody = await gatewayResponse.json();
     } catch {
