@@ -19,8 +19,7 @@ export default function Home() {
     email: '',
     service: '',
   })
-  const CONSULTATION_API = process.env.NEXT_PUBLIC_CONSULTATION_URL 
-  || "https://dv29xveh03.execute-api.us-east-1.amazonaws.com/development/consultation";
+  const CONSULTATION_API = "https://dv29xveh03.execute-api.us-east-1.amazonaws.com/development/consultation";
   const validate = () => {
     const newErrors = { name: '', number: '', email: '', service: '' }
     let isValid = true
@@ -68,7 +67,7 @@ export default function Home() {
   
     try {
       // Optionally, show some loading state here
-      const response = await fetch(process.env.NEXT_PUBLIC_CONSULTATION_URL || '', {
+      const response = await fetch(CONSULTATION_API, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
