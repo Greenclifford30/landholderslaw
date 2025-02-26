@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { secret } from '@aws-amplify/backend';
 
 /**
  * POST /api/consultation
@@ -9,7 +8,7 @@ import { secret } from '@aws-amplify/backend';
 export async function POST(request: NextRequest) {
   // Read environment variables (injected at build/runtime)
   const gatewayUrl = process.env.LANDHOLDERS_LAW_API_HOST;
-  const apiKey = secret('API_KEY');
+  const apiKey = process.env.API_KEY;
 
   // Sanity checks
   if (!gatewayUrl || !apiKey) {
