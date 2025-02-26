@@ -66,7 +66,7 @@ export default function Home() {
         {/* Enhanced Tagline */}
         <section className="bg-gradient-to-r from-yellow-600 to-yellow-700 py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p className="text-3xl font-bold text-white">
+            <p className="text-3xl font-bold text-white italic">
             Attorney by training, Husband by choice, Father by calling, and Gentleman by God!
             </p>
           </div>
