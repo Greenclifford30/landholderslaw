@@ -22,13 +22,13 @@ export default function Home() {
     "priceRange": "$$$", // Example price range
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "123 Main St",
-      "addressLocality": "Chicago",
+      "postOfficeBoxNumber": "PO Box 5191",
+      "addressLocality": "Lansing",
       "addressRegion": "IL",
-      "postalCode": "60601",
+      "postalCode": "60438",
       "addressCountry": "US"
     },
-    "telephone": "+1-312-123-4567",
+    "telephone": "+1-312-375-6773",
     "areaServed": "Chicago, IL",
     // Additional fields can be added if relevant
   }
