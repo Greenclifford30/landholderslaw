@@ -1,24 +1,80 @@
-'use client'
 import Head from 'next/head'
 import Link from 'next/link'
 import Image from 'next/image'
 import logo from '../public/landholderslawlogo.png'
 import ContactForm from './contact-form/page'
+
 export default function Home() {
+  // Replace with your own business details
+  const businessName = "Landholders Law"
+  const businessDescription = "Expert real estate legal services in Chicago, IL."
+  const fullUrl = "https://landholderslaw.com" // Change to your domain
+  // const logoUrl = "../public/landholderslawlogo.png"        // Path to your logo
+
+  // JSON-LD for a Legal Service (Schema.org)
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "name": "Landholders Law",
+    "image": `${fullUrl}/landholderslawlogo.png`,
+    "url": fullUrl,
+    "description": businessDescription,
+    "priceRange": "$$$", // Example price range
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "123 Main St",
+      "addressLocality": "Chicago",
+      "addressRegion": "IL",
+      "postalCode": "60601",
+      "addressCountry": "US"
+    },
+    "telephone": "+1-312-123-4567",
+    "areaServed": "Chicago, IL",
+    // Additional fields can be added if relevant
+  }
 
   return (
     <>
       <Head>
+        {/* Essential Meta Tags */}
         <title>Ted M. Word Esq. - Landholders Law</title>
         <meta
           name="description"
           content="Ted M. Word Esq. provides expert real estate legal services in Chicago, IL. At Landholders Law, we handle property transactions, contract review, zoning, and title disputes."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:title" content="Ted M. Word Esq. - Landholders Law" />
+        <meta
+          property="og:description"
+          content="Expert real estate legal services in Chicago, IL. Handling property transactions, contract review, zoning, title disputes, and more."
+        />
+        <meta property="og:url" content={fullUrl} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={`${fullUrl}/landholderslawlogo.png`} />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Ted M. Word Esq. - Landholders Law" />
+        <meta
+          name="twitter:description"
+          content="Expert real estate legal services in Chicago, IL. Handling property transactions, contract review, zoning, title disputes, and more."
+        />
+        <meta name="twitter:image" content={`${fullUrl}/landholderslawlogo.png`} />
+
+        {/* Canonical URL (optional if you have a single home page or for SEO best practice) */}
+        <link rel="canonical" href={fullUrl} />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </Head>
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* Updated Header with Logo */}
+        {/* Header with Logo */}
         <header className="bg-white dark:bg-gray-900 shadow-lg">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-center py-8">
@@ -32,7 +88,7 @@ export default function Home() {
                 />
                 <div>
                   <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    Landholders Law
+                    {businessName}
                   </h1>
                   <p className="text-2xl text-gray-600 dark:text-gray-300">
                     Attorney Ted M. Word Esq.
@@ -40,18 +96,6 @@ export default function Home() {
                 </div>
               </div>
               <nav className="mt-4 md:mt-0 space-x-4">
-                {/* <Link
-                  href="/admin"
-                  className="text-xl text-gray-900 dark:text-white hover:underline"
-                >
-                  Admin
-                </Link> */}
-                {/* <Link
-                  href="/client"
-                  className="text-xl text-gray-900 dark:text-white hover:underline"
-                >
-                  Client
-                </Link> */}
                 <Link
                   href="/profile"
                   className="text-xl text-gray-900 dark:text-white hover:underline"
@@ -63,20 +107,19 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Enhanced Tagline */}
+        {/* Tagline */}
         <section className="bg-gradient-to-r from-yellow-600 to-yellow-700 py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="text-3xl font-bold text-white italic">
-            Attorney by training, Husband by choice, Father by calling, and Gentleman by God!
+              Attorney by training, Husband by choice, Father by calling, and Gentleman by God!
             </p>
           </div>
         </section>
 
-        {/* Hero Section: Two Columns (Stacked Services & Consultation Form) */}
+        {/* Hero Section: Services & Consultation Form */}
         <section className="bg-gray-100 dark:bg-gray-800 py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-              {/* Left Column: Stacked Service Cards */}
               <div>
                 <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-8">
                   Our Services
@@ -136,7 +179,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Right Column: Consultation Form (Aligned to Top) */}
+              {/* Consultation Form */}
               <div className="self-start">
                 <ContactForm />
               </div>
@@ -144,14 +187,16 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Optional About Section */}
+        {/* About Section */}
         <section className="bg-white dark:bg-gray-900 py-20">
           <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white text-center">
-              About Landholders Law
+              About {businessName}
             </h3>
             <p className="mt-6 text-lg text-gray-800 dark:text-gray-300 leading-relaxed text-center">
-              At Landholders Law, we are dedicated to providing comprehensive legal solutions for all your real estate needs. With decades of experience and deep expertise in property law, our practice offers personalized services to ensure your investments are secure.
+              At Landholders Law, we are dedicated to providing comprehensive legal solutions for all
+              your real estate needs. With decades of experience and deep expertise in property law,
+              our practice offers personalized services to ensure your investments are secure.
             </p>
           </div>
         </section>
@@ -160,7 +205,7 @@ export default function Home() {
         <footer className="bg-white dark:bg-gray-900 shadow-inner py-6">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p className="text-gray-800 dark:text-gray-300">
-              &copy; {new Date().getFullYear()} Landholders Law. All rights reserved.
+              &copy; {new Date().getFullYear()} {businessName}. All rights reserved.
             </p>
           </div>
         </footer>
