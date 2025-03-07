@@ -50,12 +50,12 @@ export default function Profile() {
                 >
                   Client Portal
                 </Link> */}
-                <Link
+                {/* <Link
                   href="/about"
                   className="text-gray-900 dark:text-white hover:underline"
                 >
                   About
-                </Link>
+                </Link> */}
               </nav>
             </div>
           </div>
