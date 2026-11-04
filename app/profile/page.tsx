@@ -1,172 +1,140 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import tedPhoto from '../../public/profile.png' // Ensure you have a 650x650 image here
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, ArrowRight, Phone } from "lucide-react";
+import AttorneyPortrait from "@/components/attorney-portrait";
+import SiteFooter from "@/components/site-footer";
+import SiteHeader from "@/components/site-header";
+
+export const metadata: Metadata = {
+  title: "Ted M. Word, Esq. | Landholders Law",
+  description:
+    "Meet Ted M. Word, Esq., an Illinois attorney with more than 25 years of experience serving property clients.",
+  alternates: { canonical: "/profile" },
+  openGraph: {
+    title: "Ted M. Word, Esq. | Landholders Law",
+    description: "Attorney-led property counsel for clients in Chicago and across Illinois.",
+    url: "/profile",
+    type: "profile",
+    images: ["/landholderslawlogo.png"],
+  },
+};
 
 export default function Profile() {
   return (
-    <>
-      <Head>
-        <title>Ted M. Word Esq. Profile - Landholders Law</title>
-        <meta
-          name="description"
-          content="Profile page for Ted M. Word Esq. showcasing his background, education, bar information, and social media links."
-        />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* Common Header with Nav Bar */}
-        <header className="bg-white dark:bg-gray-900 shadow">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center py-8">
-              <div className="flex items-center">
-                <Image
-                  src="/landholderslawlogo.png"
-                  alt="Landholders Law Logo"
-                  width={64}
-                  height={64}
-                  className="mr-4"
-                />
-                <div>
-                  <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    Landholders Law
-                  </h1>
-                  <p className="text-2xl text-gray-600 dark:text-gray-300">
-                    Attorney Ted M. Word Esq.
-                  </p>
-                </div>
-              </div>
-              <nav className="mt-4 md:mt-0 space-x-4">
-                <Link
-                  href="/"
-                  className="text-gray-900 dark:text-white hover:underline"
-                >
-                  Home
-                </Link>
-                {/* <Link
-                  href="/client"
-                  className="text-gray-900 dark:text-white hover:underline"
-                >
-                  Client Portal
-                </Link> */}
-                {/* <Link
-                  href="/about"
-                  className="text-gray-900 dark:text-white hover:underline"
-                >
-                  About
-                </Link> */}
-              </nav>
-            </div>
-          </div>
-        </header>
+    <div className="public-site min-h-screen bg-paper text-ink">
+      <a className="skip-link" href="#main-content">
+        Skip to main content
+      </a>
+      <SiteHeader />
 
-        {/* Page Title */}
-        {/* <section className="bg-gray-100 dark:bg-gray-800 py-6">
-          <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-              Ted M. Word Esq. Profile
-            </h2>
-          </div>
-        </section> */}
-
-        {/* Main Content: Two-Column Layout */}
-        <main className="py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Left Column: Profile Photo */}
-              <div className="flex justify-center md:justify-start">
-                <Image
-                  src={tedPhoto}
-                  alt="Photo of Ted M. Word Esq."
-                  width={400}
-                  height={400}
-                  className="rounded-md shadow-lg"
-                />
-              </div>
-              {/* Right Column: Profile Details */}
-              <div className="space-y-8">
-                {/* About Section with Social Links */}
-                <section>
-                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    About Ted M. Word Esq.
-                  </h3>
-                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
-                  With over 25 years of experience, Ted Word is a distinguished real estate attorney dedicated to helping clients navigate the complexities of property law. Whether handling transactions, contract negotiations, or real estate disputes, he brings a wealth of knowledge and a client-focused approach to every case.
-
-
-
-His deep understanding of real estate law, combined with his commitment to excellence, has made him a trusted advocate for homeowners, investors, and businesses alike.
-
-
-
-Guided by his personal motto—
-
-“Attorney by training, Husband by choice, Father by calling, and Gentleman by God!”—
-
-Ted Word upholds integrity, professionalism, and service in every aspect of his work.
-                  </p>
-                  {/* <div className="mt-6 flex space-x-4">
-                    <Link
-                      href="https://twitter.com/yourprofile"
-                      className="text-blue-500 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Twitter
-                    </Link>
-                    <Link
-                      href="https://linkedin.com/in/yourprofile"
-                      className="text-blue-700 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      LinkedIn
-                    </Link>
-                    <Link
-                      href="https://facebook.com/yourprofile"
-                      className="text-blue-600 hover:underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Facebook
-                    </Link>
-                  </div> */}
-                </section>
-
-                {/* Education Section */}
-                <section>
-                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    Education
-                  </h3>
-                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
-                  A proud graduate of Tuskegee University, Ted earned his bachelor’s degree before obtaining his Juris Doctor from Loyola University. 
-                  </p>
-                </section>
-
-                {/* Bar Information Section */}
-                <section>
-                  <h3 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    Bar Information
-                  </h3>
-                  <p className="mt-4 text-2xl text-gray-700 dark:text-gray-300">
-                    Ted is a proud member of the Illinois Bar.
-                  </p>
-                </section>
-              </div>
-            </div>
-          </div>
-        </main>
-
-        {/* Footer */}
-        <footer className="bg-gray-100 dark:bg-gray-800 shadow-inner py-6">
-          <div className="max-w-7xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-            <p className="text-gray-700 dark:text-gray-300">
-              &copy; {new Date().getFullYear()} Landholders Law. All rights reserved.
+      <main id="main-content">
+        <section className="bg-charcoal text-paper" aria-labelledby="profile-title">
+          <div className="site-shell border-x border-paper/15 px-5 py-14 sm:px-8 sm:py-20 lg:px-12 xl:px-16">
+            <Link className="text-link-light" href="/">
+              <ArrowLeft aria-hidden="true" size={18} strokeWidth={1.8} />
+              Back to the practice
+            </Link>
+            <h1
+              id="profile-title"
+              className="mt-12 max-w-5xl font-display text-[clamp(3.4rem,8vw,6rem)] leading-[0.95] tracking-[-0.035em]"
+            >
+              Ted M. Word,
+              <br />
+              Esq.
+            </h1>
+            <p className="mt-8 max-w-2xl text-xl leading-8 text-paper/75">
+              Personal property counsel for Chicago-area clients and clients across Illinois.
             </p>
           </div>
-        </footer>
-      </div>
-    </>
-  )
+        </section>
+
+        <section className="bg-limestone" aria-labelledby="about-ted">
+          <div className="site-shell grid grid-cols-1 border-x border-ink/20 lg:grid-cols-12">
+            <div className="border-b border-ink/20 p-5 sm:p-8 lg:col-span-5 lg:border-r lg:border-b-0 lg:p-12 xl:p-16">
+              <AttorneyPortrait />
+              <p className="mt-5 max-w-md text-sm leading-6 text-ink/65">
+                Ted M. Word, Esq., attorney and founder of Landholders Law.
+              </p>
+            </div>
+
+            <div className="px-5 py-14 sm:px-8 lg:col-span-7 lg:px-12 lg:py-20 xl:px-16">
+              <h2
+                id="about-ted"
+                className="font-display text-4xl leading-tight tracking-[-0.025em] sm:text-5xl"
+              >
+                Experience grounded in clear, personal counsel.
+              </h2>
+              <div className="mt-8 max-w-3xl space-y-6 text-lg leading-8 text-ink/80">
+                <p>
+                  With more than 25 years of experience, Ted Word helps clients navigate
+                  important property decisions with direct guidance and a clear next step.
+                </p>
+                <p>
+                  His practice focuses on real estate matters, land trusts, and estate
+                  planning for homeowners, property investors, and businesses in Chicago
+                  and throughout Illinois.
+                </p>
+              </div>
+
+              <blockquote className="mt-12 border-y border-ink/25 py-8 font-display text-2xl leading-snug sm:text-3xl">
+                “Attorney by training, Husband by choice, Father by calling, and
+                Gentleman by God!”
+              </blockquote>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-paper" aria-label="Education and bar information">
+          <div className="site-shell border-x border-ink/20">
+            <CredentialRow
+              title="Education"
+              copy="Ted is a graduate of Tuskegee University and earned his Juris Doctor from Loyola University."
+            />
+            <CredentialRow title="Bar membership" copy="Ted is a member of the Illinois Bar." />
+            <CredentialRow
+              title="Experience"
+              copy="More than 25 years helping clients understand consequential property decisions."
+            />
+          </div>
+        </section>
+
+        <section className="bg-gold-deep text-paper" aria-labelledby="profile-cta-title">
+          <div className="site-shell grid grid-cols-1 border-x border-paper/20 px-5 py-14 sm:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end lg:gap-12 lg:px-12 lg:py-20 xl:px-16">
+            <div>
+              <h2
+                id="profile-cta-title"
+                className="max-w-3xl font-display text-4xl leading-tight tracking-[-0.025em] sm:text-5xl"
+              >
+                Bring the property decision in front of you.
+              </h2>
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-paper/80">
+                Request a consultation or call the firm to begin a focused conversation.
+              </p>
+            </div>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row lg:mt-0 lg:flex-col">
+              <Link className="button-light" href="/#consultation">
+                Request a consultation
+                <ArrowRight aria-hidden="true" size={19} strokeWidth={1.8} />
+              </Link>
+              <a className="button-outline-light" href="tel:+13123756773">
+                <Phone aria-hidden="true" size={18} strokeWidth={1.8} />
+                (312) 375-6773
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+function CredentialRow({ title, copy }: { title: string; copy: string }) {
+  return (
+    <div className="grid grid-cols-1 border-b border-ink/20 px-5 py-10 last:border-b-0 sm:grid-cols-[minmax(12rem,0.7fr)_minmax(0,1.3fr)] sm:gap-10 sm:px-8 lg:px-12 xl:px-16">
+      <h2 className="font-display text-3xl sm:text-4xl">{title}</h2>
+      <p className="mt-4 max-w-2xl text-lg leading-8 text-ink/75 sm:mt-0">{copy}</p>
+    </div>
+  );
 }
