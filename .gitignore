@@ -42,6 +42,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Impeccable working files
+/.impeccable/
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 

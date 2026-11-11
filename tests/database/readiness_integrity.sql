@@ -1,0 +1,33 @@
+\set ON_ERROR_STOP on
+DO $$ DECLARE seq record; BEGIN FOR seq IN SELECT schemaname,sequencename FROM pg_sequences WHERE schemaname='public' LOOP EXECUTE format('ALTER SEQUENCE %I.%I RESTART WITH 1',seq.schemaname,seq.sequencename); END LOOP; END $$;
+BEGIN;
+CREATE FUNCTION pg_temp.expect_error(statement text, expected_state text) RETURNS void LANGUAGE plpgsql AS $$ DECLARE actual_state text; BEGIN BEGIN EXECUTE statement; EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS actual_state=RETURNED_SQLSTATE; IF actual_state<>expected_state THEN RAISE EXCEPTION 'Expected %, got %: %',expected_state,actual_state,statement; END IF; RETURN; END; RAISE EXCEPTION 'Expected %, but succeeded: %',expected_state,statement; END $$;
+INSERT INTO users(public_id,display_name,email) VALUES('70000000-0000-0000-0000-000000000001','Staff','staff@example.test');
+INSERT INTO matter_number_allocations(reference_year,sequence_value,allocation_token) VALUES(2026,1,'70000000-0000-0000-0000-000000000002');
+INSERT INTO matters(public_id,number_allocation_id,matter_type,created_by) VALUES('70000000-0000-0000-0000-000000000003',1,'buyer',1);
+INSERT INTO workflow_templates(code,name,matter_type) VALUES('buyer','Buyer','buyer');
+INSERT INTO workflow_template_versions(workflow_template_id,version) VALUES(1,1),(1,2);
+UPDATE workflow_template_versions SET status='published',published_at=now() WHERE id=1;
+INSERT INTO matter_workflows(matter_id,workflow_template_version_id,instantiated_by) VALUES(1,1,1);
+INSERT INTO workflow_template_validation_events(workflow_template_version_id,action,attorney_user_id) VALUES(2,'validated',1);
+SELECT pg_temp.expect_error($q$INSERT INTO readiness_evaluations(matter_id,matter_workflow_id,workflow_template_version_id,template_validation_event_id,result,purpose,evaluated_by) VALUES(1,1,1,1,'ready','review',1)$q$,'23503');
+INSERT INTO readiness_evaluations(matter_id,matter_workflow_id,workflow_template_version_id,result,purpose,evaluated_by) VALUES(1,1,1,'not_ready','transaction_closing',1);
+SELECT pg_temp.expect_error($q$SET CONSTRAINTS readiness_evaluations_sealed_commit IMMEDIATE$q$,'P0001');
+INSERT INTO readiness_evaluation_items(matter_id,readiness_evaluation_id,finding_kind,outcome,description_snapshot) VALUES(1,2,'primary_attorney','blocking','No attorney');
+INSERT INTO closing_events(matter_id,event_type,actual_at,actor_user_id) VALUES(1,'closed',now(),1);
+SELECT pg_temp.expect_error($q$INSERT INTO closing_readiness_records(matter_id,closing_event_id,readiness_evaluation_id,recorded_by) VALUES(1,1,2,1)$q$,'P0001');
+UPDATE readiness_evaluations SET sealed_at=now() WHERE id=2;
+SELECT pg_temp.expect_error($q$INSERT INTO readiness_evaluation_items(matter_id,readiness_evaluation_id,finding_kind,outcome,description_snapshot) VALUES(1,2,'primary_attorney','blocking','Late item')$q$,'P0001');
+SELECT pg_temp.expect_error($q$INSERT INTO readiness_evaluation_item_sources(matter_id,readiness_evaluation_item_id,approval_decision_id) VALUES(1,1,99)$q$,'P0001');
+SELECT pg_temp.expect_error($q$INSERT INTO closing_readiness_records(matter_id,closing_event_id,readiness_evaluation_id,recorded_by) VALUES(1,1,2,1)$q$,'P0001');
+INSERT INTO closing_readiness_records(matter_id,closing_event_id,readiness_evaluation_id,not_ready_reason,recorded_by) VALUES(1,1,2,'Closing occurred; follow-up required',1);
+INSERT INTO correspondence(public_id,matter_id,title,status,created_by) VALUES('70000000-0000-0000-0000-000000000004',1,'Letter','draft',1);
+INSERT INTO correspondence_sends(matter_id,correspondence_id,entry_kind,sent_on,cutoff_on,method,entered_by) VALUES(1,1,'historical','2026-01-01','2026-11-01','email',1);
+SELECT pg_temp.expect_error($q$SET CONSTRAINTS correspondence_sends_sealed_commit IMMEDIATE$q$,'P0001');
+INSERT INTO correspondence_send_recipients(matter_id,send_id,recipient_kind,address) VALUES(1,1,'to','person@example.test');
+UPDATE correspondence_sends SET sealed_at=now() WHERE id=1;
+SELECT pg_temp.expect_error($q$INSERT INTO correspondence_send_recipients(matter_id,send_id,recipient_kind,address) VALUES(1,1,'cc','late@example.test')$q$,'P0001');
+SELECT pg_temp.expect_error($q$INSERT INTO correspondence_send_evidence(matter_id,send_id,document_version_id) VALUES(1,1,99)$q$,'P0001');
+SET CONSTRAINTS ALL IMMEDIATE;
+ROLLBACK;
+\echo 'Readiness and send integrity checks passed.'

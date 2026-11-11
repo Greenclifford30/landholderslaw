@@ -1,0 +1,32 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: landholders_test
+      POSTGRES_USER: schema_test
+      POSTGRES_PASSWORD: local_disposable_only
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ../../documents/schema:/schema:ro
+      - ../../database:/database:ro
+      - ./:/tests:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U schema_test -d landholders_test"]
+      interval: 1s
+      timeout: 5s
+      retries: 30
+  migrations:
+    profiles: ["tools"]
+    build:
+      context: ../..
+      dockerfile: tests/database/Dockerfile.migrations
+    environment:
+      DATABASE_URL: postgresql+psycopg2://schema_test:local_disposable_only@postgres:5432/landholders_test
+      DB_MIGRATION_ROLE: ll_migrator
+      ALLOW_DISPOSABLE_DB_DOWNGRADE: "1"
+    volumes:
+      - ../..:/workspace:ro
+    depends_on:
+      postgres:
+        condition: service_healthy

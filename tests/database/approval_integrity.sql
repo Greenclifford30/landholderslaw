@@ -1,0 +1,30 @@
+\set ON_ERROR_STOP on
+DO $$ DECLARE seq record; BEGIN FOR seq IN SELECT schemaname,sequencename FROM pg_sequences WHERE schemaname='public' LOOP EXECUTE format('ALTER SEQUENCE %I.%I RESTART WITH 1',seq.schemaname,seq.sequencename); END LOOP; END $$;
+BEGIN;
+CREATE FUNCTION pg_temp.expect_error(statement text, expected_state text) RETURNS void LANGUAGE plpgsql AS $$ DECLARE actual_state text; BEGIN BEGIN EXECUTE statement; EXCEPTION WHEN OTHERS THEN GET STACKED DIAGNOSTICS actual_state=RETURNED_SQLSTATE; IF actual_state<>expected_state THEN RAISE EXCEPTION 'Expected %, got %: %',expected_state,actual_state,statement; END IF; RETURN; END; RAISE EXCEPTION 'Expected %, but succeeded: %',expected_state,statement; END $$;
+INSERT INTO users(public_id,display_name,email) VALUES('80000000-0000-0000-0000-000000000001','Staff','staff@example.test');
+INSERT INTO matter_number_allocations(reference_year,sequence_value,allocation_token) VALUES(2026,1,'80000000-0000-0000-0000-000000000002');
+INSERT INTO matters(public_id,number_allocation_id,created_by) VALUES('80000000-0000-0000-0000-000000000003',1,1);
+INSERT INTO tasks(public_id,matter_id,source,title,is_required,created_by) VALUES('80000000-0000-0000-0000-000000000004',1,'manual','Task',true,1);
+INSERT INTO exception_requests(public_id,matter_id,kind,status,requested_by) VALUES('80000000-0000-0000-0000-000000000005',1,'task_waiver','draft',1);
+INSERT INTO exception_revisions(matter_id,exception_request_id,revision,justification,created_by) VALUES(1,1,1,'Reason',1);
+SELECT pg_temp.expect_error($q$SET CONSTRAINTS exception_revisions_sealed_commit IMMEDIATE$q$,'P0001');
+SELECT pg_temp.expect_error($q$INSERT INTO approval_requests(public_id,matter_id,exception_revision_id,requested_by,status) VALUES('80000000-0000-0000-0000-000000000006',1,1,1,'pending')$q$,'P0001');
+INSERT INTO exception_targets(matter_id,exception_revision_id,task_id) VALUES(1,1,1);
+UPDATE exception_revisions SET sealed_at=now() WHERE id=1;
+SELECT pg_temp.expect_error($q$UPDATE exception_targets SET task_id=1 WHERE exception_revision_id=1$q$,'P0001');
+SELECT pg_temp.expect_error($q$INSERT INTO exception_triggers(matter_id,exception_revision_id,trigger_kind) VALUES(1,1,'closing_date')$q$,'P0001');
+INSERT INTO approval_requests(public_id,matter_id,exception_revision_id,requested_by,status) VALUES('80000000-0000-0000-0000-000000000007',1,1,1,'pending');
+SELECT pg_temp.expect_error($q$UPDATE approval_requests SET requested_by=999 WHERE exception_revision_id=1$q$,'P0001');
+SELECT pg_temp.expect_error($q$DELETE FROM approval_requests WHERE exception_revision_id=1$q$,'P0001');
+INSERT INTO exception_requests(public_id,matter_id,kind,status,requested_by) VALUES('80000000-0000-0000-0000-000000000008',1,'task_waiver','draft',1);
+INSERT INTO exception_revisions(matter_id,exception_request_id,revision,justification,created_by) VALUES(1,2,1,'Missing target',1);
+UPDATE exception_revisions SET sealed_at=now() WHERE id=2;
+SELECT pg_temp.expect_error($q$INSERT INTO approval_requests(public_id,matter_id,exception_revision_id,requested_by,status) VALUES('80000000-0000-0000-0000-000000000009',1,2,1,'pending')$q$,'P0001');
+INSERT INTO correspondence(public_id,matter_id,title,status,created_by) VALUES('80000000-0000-0000-0000-000000000010',1,'Letter','draft',1);
+INSERT INTO correspondence_drafts(matter_id,correspondence_id,revision,subject,body,delivery_method,created_by) VALUES(1,1,1,'Subject','Body','email',1);
+SELECT pg_temp.expect_error($q$SET CONSTRAINTS correspondence_drafts_sealed_commit IMMEDIATE$q$,'P0001');
+UPDATE correspondence_drafts SET sealed_at=now() WHERE id=1;
+SET CONSTRAINTS ALL IMMEDIATE;
+ROLLBACK;
+\echo 'Approval package integrity checks passed.'
